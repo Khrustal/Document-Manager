@@ -6,7 +6,6 @@ public class User {
     private String password;
     private String email;
     private final Boolean admin;
-    private List<Storable> moderationList;
 
     public User(Long id, String login, String password, String email, Boolean admin) {
         this.id = id;
@@ -38,10 +37,6 @@ public class User {
 
     public Boolean getAdmin() {
         return admin;
-    }
-
-    public List<Storable> getModerationList() {
-        return moderationList;
     }
 
     public Long getId() {

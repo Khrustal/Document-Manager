@@ -1,7 +1,7 @@
 public class UserController {
-    UserRepository userRepository;
-    DirectoryRepository directoryRepository;
-    DocumentRepository documentRepository;
+    UserDao userDao;
+    DirectoryDao directoryDao;
+    DocumentDao documentDao;
 
     public void addModerationTask() {}
     public void getModerationTask() {}

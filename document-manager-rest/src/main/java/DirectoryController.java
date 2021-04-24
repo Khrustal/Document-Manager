@@ -1,8 +1,8 @@
 import java.util.List;
 
 public class DirectoryController {
-    DirectoryRepository directoryRepository;
-    UserRepository userRepository;
+    DirectoryDao directoryDao;
+    UserDao userDao;
     FinderService finderService;
 
      public void create(String name, Directory parent) {}

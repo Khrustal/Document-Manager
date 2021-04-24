@@ -1,9 +1,7 @@
-import java.util.List;
-
 public class DocumentController {
-    DocumentRepository documentRepository;
-    DirectoryRepository directoryRepository;
-    UserRepository userRepository;
+    DocumentDao documentDao;
+    DirectoryDao directoryDao;
+    UserDao userDao;
 
     public void create(String name, Directory parent) {}
 

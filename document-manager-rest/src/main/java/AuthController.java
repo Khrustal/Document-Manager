@@ -1,5 +1,5 @@
 public class AuthController {
-    UserRepository userRepository;
+    UserDao userDao;
     AuthService authService;
 
     //won't be void

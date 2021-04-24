@@ -1,5 +1,5 @@
 public class MailConfigurationController {
-    UserRepository userRepository;
+    UserDao userDao;
 
     public MailConfiguration getConfig() {
         return null;

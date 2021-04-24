@@ -1,3 +1,4 @@
+import java.sql.Timestamp;
 import java.util.List;
 
 public abstract class Storable {
@@ -5,24 +6,21 @@ public abstract class Storable {
     private Storable parentId;
     private final User author;
     private String name;
-    private Boolean onModeration;
+    private Types type;
+    private Statuses status;
+    private Timestamp creation_DT;
     private Boolean freeAccess;
-    private List<User> moderators;
-    private List<User> editors;
-    private List<User> readers;
 
-    public Storable(Long id, User author, String name, Boolean freeAccess) {
-        this.id = id;
-        this.author = author;
-        this.name = name;
-        this.freeAccess = freeAccess;
-    }
-
-    public Storable(Long id, Storable parentId, User author, String name, Boolean freeAccess) {
+    public Storable(Long id, Storable parentId, User author, String name,
+                    Types type, Statuses status, Timestamp creation_DT,
+                    Boolean freeAccess) {
         this.id = id;
         this.parentId = parentId;
         this.author = author;
         this.name = name;
+        this.type = type;
+        this.status = status;
+        this.creation_DT = creation_DT;
         this.freeAccess = freeAccess;
     }
 
@@ -34,28 +32,12 @@ public abstract class Storable {
         return parentId;
     }
 
+    public void setParentId(Storable parentId) {
+        this.parentId = parentId;
+    }
+
     public User getAuthor() {
         return author;
-    }
-
-    public Boolean getOnModeration() {
-        return onModeration;
-    }
-
-    public Boolean getFreeAccess() {
-        return freeAccess;
-    }
-
-    public List<User> getModerators() {
-        return moderators;
-    }
-
-    public List<User> getEditors() {
-        return editors;
-    }
-
-    public List<User> getReaders() {
-        return readers;
     }
 
     public String getName() {
@@ -66,39 +48,35 @@ public abstract class Storable {
         this.name = name;
     }
 
-    public void setParentId(Storable parentId) {
-        this.parentId = parentId;
+    public Types getType() {
+        return type;
     }
 
-    public void setOnModeration(Boolean onModeration) {
-        this.onModeration = onModeration;
+    public void setType(Types type) {
+        this.type = type;
+    }
+
+    public Statuses getStatus() {
+        return status;
+    }
+
+    public void setStatus(Statuses status) {
+        this.status = status;
+    }
+
+    public Timestamp getCreation_DT() {
+        return creation_DT;
+    }
+
+    public void setCreation_DT(Timestamp creation_DT) {
+        this.creation_DT = creation_DT;
+    }
+
+    public Boolean getFreeAccess() {
+        return freeAccess;
     }
 
     public void setFreeAccess(Boolean freeAccess) {
         this.freeAccess = freeAccess;
-    }
-
-    public void addModerator(User moderator) {
-        this.moderators.add(moderator);
-    }
-
-    public void addEditor(User editor) {
-        this.editors.add(editor);
-    }
-
-    public void addReader(User reader) {
-        this.readers.add(reader);
-    }
-
-    public void removeModerator(User moderator) {
-        this.moderators.remove(moderator);
-    }
-
-    public void removeEditor(User editor) {
-        this.editors.remove(editor);
-    }
-
-    public void removeReader(User reader) {
-        this.readers.remove(reader);
     }
 }

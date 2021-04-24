@@ -1,17 +1,20 @@
+import java.sql.Timestamp;
 import java.util.List;
 
 public class Document extends Storable{
     private String description;
-    private List<File> files;
-    private Boolean current;
-    private VersionManager versionManager;
+    private Priorities priority;
+    private DocType docType;
+    private User ancestor;
 
-    public Document(Long id, User author, String name, Boolean freeAccess) {
-        super(id, author, name, freeAccess);
-    }
-
-    public Document(Long id, Storable parentId, User author, String name, Boolean freeAccess) {
-        super(id, parentId, author, name, freeAccess);
+    public Document(Long id, Storable parentId, User author, String name,
+                    Types type, Statuses status, Timestamp creation_DT, Boolean freeAccess,
+                    String description, Priorities priority, DocType docType, User ancestor) {
+        super(id, parentId, author, name, type, status, creation_DT, freeAccess);
+        this.description = description;
+        this.priority = priority;
+        this.docType = docType;
+        this.ancestor = ancestor;
     }
 
     public String getDescription() {
@@ -22,21 +25,27 @@ public class Document extends Storable{
         this.description = description;
     }
 
-    public List<File> getFiles() {
-        return files;
+    public Priorities getPriority() {
+        return priority;
     }
 
-    public void addFile(File file) {
-        this.files.add(file);
+    public void setPriority(Priorities priority) {
+        this.priority = priority;
     }
 
-    public void removeFile(File file) {
-        this.files.remove(file);
+    public DocType getDocType() {
+        return docType;
     }
 
-    public Boolean isCurrent() {return current;}
+    public void setDocType(DocType docType) {
+        this.docType = docType;
+    }
 
-    public void setCurrent(Boolean current) {
-        this.current = current;
+    public User getAncestor() {
+        return ancestor;
+    }
+
+    public void setAncestor(User ancestor) {
+        this.ancestor = ancestor;
     }
 }

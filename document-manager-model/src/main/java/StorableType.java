@@ -1,4 +1,4 @@
-public enum Types {
+public enum StorableType {
     DOCUMENT,
     DIRECTORY
 }

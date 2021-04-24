@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DocumentDaoImpl implements DocumentDao{
 
@@ -29,7 +30,7 @@ public class DocumentDaoImpl implements DocumentDao{
                 //Get parent
                 Long parentId = rs.getLong("parent_id");
                 DirectoryDao directoryDao = new DirectoryDaoImpl();
-                Directory parentDirectory = directoryDao.find(parentId);
+                Optional<Directory> parentDirectory = directoryDao.find(parentId);
 
                 //Find author by id
                 Long userId = rs.getLong("author_id");
@@ -37,7 +38,7 @@ public class DocumentDaoImpl implements DocumentDao{
                 User author = userDao.find(userId);
 
                 String name = rs.getString("name");
-                Types type = Types.valueOf(rs.getString("type"));
+                StorableType type = StorableType.valueOf(rs.getString("type"));
                 Statuses status = Statuses.valueOf(rs.getString("status"));
                 Boolean freeAccess = rs.getBoolean("free_access");
                 Timestamp creation_DT = rs.getTimestamp("creation_dt");

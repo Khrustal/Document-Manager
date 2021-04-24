@@ -1,5 +1,4 @@
 import java.sql.Timestamp;
-import java.util.List;
 
 public class Document extends Storable{
     private String description;
@@ -7,7 +6,7 @@ public class Document extends Storable{
     private DocType docType;
     private User ancestor;
 
-    public Document(Long id, Storable parentId, User author, String name,
+    public Document(Long id, Directory parentId, User author, String name,
                     Types type, Statuses status, Timestamp creation_DT, Boolean freeAccess,
                     String description, Priorities priority, DocType docType, User ancestor) {
         super(id, parentId, author, name, type, status, creation_DT, freeAccess);

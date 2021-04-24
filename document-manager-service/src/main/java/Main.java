@@ -33,5 +33,12 @@ public class Main {
         //Get Directory with id = 2
         Directory directory = directoryDao.find(2L);
         System.out.println(directory.getName());
+
+        //Get All Documents
+        DocumentDao documentDao = new DocumentDaoImpl();
+        List<Document> documents = documentDao.findAll();
+        for(Document document : documents) {
+            System.out.println(document.getName());
+        }
     }
 }

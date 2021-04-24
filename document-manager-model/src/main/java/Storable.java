@@ -1,9 +1,8 @@
 import java.sql.Timestamp;
-import java.util.List;
 
 public abstract class Storable {
     private final Long id;
-    private Storable parentId;
+    private Directory parent;
     private final User author;
     private String name;
     private Types type;
@@ -11,11 +10,11 @@ public abstract class Storable {
     private Timestamp creation_DT;
     private Boolean freeAccess;
 
-    public Storable(Long id, Storable parentId, User author, String name,
+    public Storable(Long id, Directory parentId, User author, String name,
                     Types type, Statuses status, Timestamp creation_DT,
                     Boolean freeAccess) {
         this.id = id;
-        this.parentId = parentId;
+        this.parent = parentId;
         this.author = author;
         this.name = name;
         this.type = type;
@@ -28,12 +27,12 @@ public abstract class Storable {
         return id;
     }
 
-    public Storable getParentId() {
-        return parentId;
+    public Storable getParent() {
+        return parent;
     }
 
-    public void setParentId(Storable parentId) {
-        this.parentId = parentId;
+    public void setParent(Directory parent) {
+        this.parent = parent;
     }
 
     public User getAuthor() {

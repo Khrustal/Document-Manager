@@ -48,9 +48,24 @@ public class Main {
         System.out.println(user.getLogin());
 
         //Create directory
-        Directory newDirectory = new Directory(null, null, user, "Example", StorableType.DIRECTORY,
-                Statuses.CURRENT, new Timestamp(System.currentTimeMillis()), true);
-        //System.out.println(newDirectory.getType().toString());
-        directoryDao.create(newDirectory);
+//        Directory newDirectory = new Directory(null, null, user, "Example", StorableType.DIRECTORY,
+//                Statuses.CURRENT, new Timestamp(System.currentTimeMillis()), true);
+//        //System.out.println(newDirectory.getType().toString());
+//        directoryDao.create(newDirectory);
+
+        //Update directory
+//        directoryDao.update(2L, "Test Update");
+
+        //Create document
+//        Document newDocument = new Document(null, null, user, "Example document",
+//                StorableType.DOCUMENT, Statuses.CURRENT, new Timestamp(System.currentTimeMillis()), true,
+//                "Example document", Priorities.LOW, new DocType(1L, "Fax"), null);
+//        documentDao.create(newDocument);
+
+        //Find contents of directory with id = 2
+        List<Storable> contents = directoryDao.getContents(2L);
+        for(Storable content : contents) {
+            System.out.println(content.getName());
+        }
     }
 }

@@ -1,0 +1,11 @@
+DROP TABLE editors;
+DROP TABLE moderators;
+DROP TABLE readers;
+DROP TABLE file;
+DROP TABLE storable;
+DROP TABLE "user";
+DROP TABLE mail_configuration;
+DROP TABLE document_types;
+DROP TYPE storable_types;
+DROP TYPE statuses;
+DROP TYPE priorities;

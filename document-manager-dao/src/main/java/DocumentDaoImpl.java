@@ -1,10 +1,7 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +12,10 @@ public class DocumentDaoImpl implements DocumentDao{
             = LoggerFactory.getLogger(DocumentDaoImpl .class);
 
     public static final String SQL_SELECT_ALL_DOCUMENTS = "SELECT * FROM storable WHERE type = 'DOCUMENT'";
+    public static final String SQL_CREATE_DOCUMENT = "INSERT INTO storable (parent_id, name, author_id, type, free_access, status,\n" +
+            "                      creation_DT, description, priority, document_type, ancestor_id)\n" +
+            "                      VALUES (?, ?, ?, 'DOCUMENT', ?, ?::statuses, CURRENT_TIMESTAMP,\n" +
+            "                              ?, ?::priorities, ?, ?)";
 
     @Override
     public List<Document> findAll() {
@@ -71,12 +72,42 @@ public class DocumentDaoImpl implements DocumentDao{
     }
 
     @Override
-    public Document find(Long id) {
+    public Document find(Long id) { //TODO
         return null;
     }
 
     @Override
-    public List<Document> findInDirectory(Long dirId) {
-        return null;
+    public void create(Document document) {
+        Connection c = new DbConnector().connect();
+        try (PreparedStatement createDocument = c.prepareStatement(SQL_CREATE_DOCUMENT))
+        {
+            if(null != document.getParent()) {
+                createDocument.setLong(1, document.getParent().get().getId());
+            }
+            else {
+                createDocument.setNull(1, Types.NULL);
+            }
+            createDocument.setString(2, document.getName());
+            createDocument.setLong(3, document.getAuthor().getId());
+            createDocument.setBoolean(4, document.getFreeAccess());
+            createDocument.setString(5, document.getStatus().toString());
+            createDocument.setString(6, document.getDescription());
+            createDocument.setString(7, document.getPriority().name());
+            createDocument.setLong(8, document.getDocType().getId());
+            if(null != document.getAncestor()) {
+                createDocument.setLong(9, document.getAncestor().getId());
+            }
+            else {
+                createDocument.setNull(9, Types.NULL);
+            }
+            createDocument.executeUpdate();
+            createDocument.close();
+            c.close();
+        } catch (Exception e) {
+            logger.info("Error while executing SQL statement");
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
+        }
+        logger.info("Saved document in database successfully");
     }
 }

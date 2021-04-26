@@ -63,7 +63,7 @@ public class Main {
 //        documentDao.create(newDocument);
 
         //Find contents of directory with id = 2
-        List<Storable> contents = directoryDao.getContents(2L);
+        List<Storable> contents = directoryDao.getContents(null);
         for(Storable content : contents) {
             System.out.println(content.getName());
         }

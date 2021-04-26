@@ -19,6 +19,7 @@ public class DirectoryDaoImpl implements DirectoryDao{
             "                      VALUES (?, ?, ?, ?::storable_types, ?, ?::statuses, ?, null, null, null, null)";
     public static final String SQL_UPDATE_DIRECTORY = "UPDATE  storable SET name = ? WHERE id = ?";
     public static final String SQL_SELECT_CONTENTS= "SELECT * FROM storable WHERE parent_id = ? ORDER BY creation_dt";
+    public static final String SQL_SELECT_CONTENTS_FROM_CORE = "SELECT * FROM storable WHERE parent_id IS NULL ORDER BY creation_dt";
 
 
     @Override
@@ -166,10 +167,16 @@ public class DirectoryDaoImpl implements DirectoryDao{
         List<Storable> contents = new ArrayList<>();
 
         DirectoryDao directoryDao = new DirectoryDaoImpl();
-        Optional<Directory> parentDirectory = directoryDao.find(directoryId);
         Connection c = new DbConnector().connect();
-        try(PreparedStatement statement = c.prepareStatement(SQL_SELECT_CONTENTS)) {
-            statement.setLong(1, directoryId);
+        String sqlStatement = (directoryId == null) ? SQL_SELECT_CONTENTS_FROM_CORE : SQL_SELECT_CONTENTS;
+        try(PreparedStatement statement = c.prepareStatement(sqlStatement)) {
+            Optional<Directory> parentDirectory = Optional.empty();
+            if(null == directoryId) {
+                parentDirectory = Optional.empty();
+            }
+            else {
+                statement.setLong(1, directoryId);
+            }
             ResultSet rs = statement.executeQuery();
             while ( rs.next() ) {
 
@@ -209,7 +216,7 @@ public class DirectoryDaoImpl implements DirectoryDao{
             statement.close();
             c.close();
         } catch ( Exception e ) {
-            logger.info("Error while executing SQL statement");
+            logger.error("Error while executing SQL statement");
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );
             System.exit(0);
         }

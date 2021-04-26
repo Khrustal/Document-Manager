@@ -1,3 +1,6 @@
+import org.example.documentmanagerdao.UserDao;
+import org.example.documentmanagermodel.MailConfiguration;
+
 public class MailConfigurationController {
     UserDao userDao;
 

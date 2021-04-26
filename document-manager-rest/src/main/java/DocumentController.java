@@ -1,3 +1,10 @@
+import org.example.documentmanagerdao.DirectoryDao;
+import org.example.documentmanagerdao.DocumentDao;
+import org.example.documentmanagerdao.UserDao;
+import org.example.documentmanagerdto.DocumentDto;
+import org.example.documentmanagerdto.StorableDto;
+import org.example.documentmanagermodel.Directory;
+
 public class DocumentController {
     DocumentDao documentDao;
     DirectoryDao directoryDao;

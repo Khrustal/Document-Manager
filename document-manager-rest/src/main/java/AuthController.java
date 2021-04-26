@@ -1,3 +1,6 @@
+import org.example.documentmanagerdao.UserDao;
+import org.example.documentmanagerservices.AuthService;
+
 public class AuthController {
     UserDao userDao;
     AuthService authService;

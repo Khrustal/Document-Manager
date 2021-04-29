@@ -19,6 +19,7 @@ public class DocumentDaoImpl implements DocumentDao{
             "                      creation_DT, description, priority, document_type, ancestor_id)\n" +
             "                      VALUES (?, ?, ?, 'DOCUMENT', ?, ?::statuses, CURRENT_TIMESTAMP,\n" +
             "                              ?, ?::priorities, ?, ?)";
+    public static final String SQL_SELECT_DOCUMENT = "SELECT * FROM storable WHERE id = ? AND type = 'DOCUMENT'";
 
     @Override
     public List<Document> findAll() {
@@ -42,6 +43,7 @@ public class DocumentDaoImpl implements DocumentDao{
                 User author = userDao.find(userId);
 
                 String name = rs.getString("name");
+
                 StorableType type = StorableType.valueOf(rs.getString("type"));
                 Statuses status = Statuses.valueOf(rs.getString("status"));
                 Boolean freeAccess = rs.getBoolean("free_access");
@@ -49,7 +51,7 @@ public class DocumentDaoImpl implements DocumentDao{
                 String description = rs.getString("description");
                 Priorities priority = Priorities.valueOf(rs.getString("priority"));
 
-                //Find org.example.documentmanagermodel.DocType
+                //Find DocType
                 Long typeId = rs.getLong("document_type");
                 DocTypeDao docTypeDao = new DocTypeDaoImpl();
                 DocType docType = docTypeDao.find(typeId);
@@ -57,7 +59,7 @@ public class DocumentDaoImpl implements DocumentDao{
                 //Find ancestor
                 Long ancestorId = rs.getLong("ancestor_id");
                 DocumentDao documentDao = new DocumentDaoImpl();
-                Storable ancestor = documentDao.find(ancestorId);
+                Optional<Document> ancestor = documentDao.find(ancestorId);
 
                 Document document = new Document(id, parentDirectory, author, name, type, status,
                         creation_DT, freeAccess, description, priority, docType, ancestor);
@@ -76,8 +78,56 @@ public class DocumentDaoImpl implements DocumentDao{
     }
 
     @Override
-    public Document find(Long id) { //TODO
-        return null;
+    public Optional<Document> find(Long id) {
+        Optional<Document> result = Optional.empty();
+        Connection c = new DbConnector().connect();
+        try (PreparedStatement findDocument = c.prepareStatement(SQL_SELECT_DOCUMENT))
+        {
+            findDocument.setLong(1, id);
+            ResultSet rs = findDocument.executeQuery();
+            while ( rs.next() ) {
+                Long documentId = rs.getLong("id");
+
+                //Get parent
+                Long parentId = rs.getLong("parent_id");
+                DirectoryDao directoryDao = new DirectoryDaoImpl();
+                Optional<Directory> parent = directoryDao.find(parentId);
+
+                String name = rs.getString("name");
+
+                //Find author by id
+                Long userId = rs.getLong("author_id");
+                UserDao userDao = new UserDaoImpl();
+                User user = userDao.find(userId);
+
+                StorableType type = StorableType.valueOf(rs.getString("type"));
+                Statuses status = Statuses.valueOf(rs.getString("status"));
+                Boolean freeAccess = rs.getBoolean("free_access");
+                Timestamp creation_DT = rs.getTimestamp("creation_dt");
+                String description = rs.getString("description");
+                Priorities priority = Priorities.valueOf(rs.getString("priority"));
+
+                //Find doctype
+                DocTypeDao docTypeDao = new DocTypeDaoImpl();
+                Long docId = rs.getLong("document_type");
+                DocType docType = docTypeDao.find(docId);
+                DocumentDao documentDao = new DocumentDaoImpl();
+                Long ancestorId = rs.getLong("ancestor_id");
+                Optional<Document> ancestor = documentDao.find(ancestorId);
+
+                result = Optional.of(new Document(documentId, parent, user, name, type, status,
+                        creation_DT, freeAccess, description, priority, docType, ancestor));
+            }
+            rs.close();
+            findDocument.close();
+            c.close();
+        } catch (Exception e) {
+            logger.info("Error while executing SQL statement");
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
+        }
+        logger.info("Retrieved directory from database successfully");
+        return result;
     }
 
     @Override
@@ -99,7 +149,7 @@ public class DocumentDaoImpl implements DocumentDao{
             createDocument.setString(7, document.getPriority().name());
             createDocument.setLong(8, document.getDocType().getId());
             if(null != document.getAncestor()) {
-                createDocument.setLong(9, document.getAncestor().getId());
+                createDocument.setLong(9, document.getAncestor().get().getId());
             }
             else {
                 createDocument.setNull(9, Types.NULL);

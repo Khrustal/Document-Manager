@@ -7,11 +7,11 @@ public class Document extends Storable{
     private String description;
     private Priorities priority;
     private DocType docType;
-    private Storable ancestor;
+    private Optional<Document> ancestor;
 
     public Document(Long id, Optional<Directory> parentId, User author, String name,
                     StorableType type, Statuses status, Timestamp creation_DT, Boolean freeAccess,
-                    String description, Priorities priority, DocType docType, Storable ancestor) {
+                    String description, Priorities priority, DocType docType, Optional<Document> ancestor) {
         super(id, parentId, author, name, type, status, creation_DT, freeAccess);
         this.description = description;
         this.priority = priority;
@@ -43,11 +43,11 @@ public class Document extends Storable{
         this.docType = docType;
     }
 
-    public Storable getAncestor() {
+    public Optional<Document> getAncestor() {
         return ancestor;
     }
 
-    public void setAncestor(Storable ancestor) {
+    public void setAncestor(Optional<Document> ancestor) {
         this.ancestor = ancestor;
     }
 }

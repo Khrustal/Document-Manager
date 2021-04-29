@@ -16,6 +16,17 @@
         <servlet-name>CreateDocServlet</servlet-name>
         <servlet-class>org.example.web.CreateDocServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GetDocServlet</servlet-name>
+        <servlet-class>org.example.web.GetDocServlet</servlet-class>
+    </servlet>    <servlet>
+        <servlet-name>GetDirServlet</servlet-name>
+        <servlet-class>org.example.web.GetDirServlet</servlet-class>
+    </servlet>    <servlet>
+        <servlet-name>GetContentsServlet</servlet-name>
+        <servlet-class>org.example.web.GetContentsServlet</servlet-class>
+    </servlet>
+
 
     <servlet-mapping>
         <servlet-name>DocTypeServlet</servlet-name>
@@ -28,5 +39,17 @@
     <servlet-mapping>
         <servlet-name>CreateDocServlet</servlet-name>
         <url-pattern>/create_doc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetDocServlet</servlet-name>
+        <url-pattern>/get_doc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetDirServlet</servlet-name>
+        <url-pattern>/get_dir</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetContentsServlet</servlet-name>
+        <url-pattern>/get_contents</url-pattern>
     </servlet-mapping>
 </web-app>

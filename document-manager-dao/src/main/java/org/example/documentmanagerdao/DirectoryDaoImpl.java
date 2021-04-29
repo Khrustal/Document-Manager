@@ -206,7 +206,7 @@ public class DirectoryDaoImpl implements DirectoryDao{
                     //Find ancestor
                     Long ancestorId = rs.getLong("ancestor_id");
                     DocumentDao documentDao = new DocumentDaoImpl();
-                    Storable ancestor = documentDao.find(ancestorId);
+                    Optional<Document> ancestor = documentDao.find(ancestorId);
                     Document document = new Document(id, parentDirectory, author, name, type, status,
                             creation_DT, freeAccess, description, priority, docType, ancestor);
                     contents.add(document);

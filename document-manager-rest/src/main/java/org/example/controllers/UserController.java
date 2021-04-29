@@ -1,3 +1,5 @@
+package org.example.controllers;
+
 import org.example.documentmanagerdao.DirectoryDao;
 import org.example.documentmanagerdao.DocumentDao;
 import org.example.documentmanagerdao.UserDao;

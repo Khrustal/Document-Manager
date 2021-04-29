@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+    <servlet>
+        <servlet-name>DocTypeServlet</servlet-name>
+        <servlet-class>org.example.web.DocTypeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateDirServlet</servlet-name>
+        <servlet-class>org.example.web.CreateDirServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateDocServlet</servlet-name>
+        <servlet-class>org.example.web.CreateDocServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DocTypeServlet</servlet-name>
+        <url-pattern>/doctype</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateDirServlet</servlet-name>
+        <url-pattern>/create_dir</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateDocServlet</servlet-name>
+        <url-pattern>/create_doc</url-pattern>
+    </servlet-mapping>
+</web-app>

@@ -1,3 +1,5 @@
+package org.example.controllers;
+
 import org.example.documentmanagerdao.UserDao;
 import org.example.documentmanagermodel.MailConfiguration;
 

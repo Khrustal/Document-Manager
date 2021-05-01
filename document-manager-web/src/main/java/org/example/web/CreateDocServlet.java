@@ -5,6 +5,7 @@ import org.example.documentmanagermodel.Directory;
 import org.example.documentmanagermodel.Document;
 import org.example.documentmanagermodel.Priorities;
 import org.example.documentmanagermodel.User;
+import org.example.documentmanagerservices.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +17,18 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 public class CreateDocServlet extends HttpServlet {
+
+    private DocumentService documentService;
+    private UserService userService;
+    private DirectoryService directoryService;
+
+    @Override
+    public void init() throws ServletException {
+        userService = new UserServiceImpl();
+        documentService = new DocumentServiceImpl();
+        directoryService = new DirectoryServiceImpl();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -31,11 +44,8 @@ public class CreateDocServlet extends HttpServlet {
         Boolean freeAccess = Boolean.parseBoolean(rq.getParameter("free_access"));
         String description = rq.getParameter("description");
         Priorities priority = Priorities.valueOf(rq.getParameter("priority"));
-        UserDao userDao = new UserDaoImpl();
-        User user = userDao.find(authorId);
-        DirectoryDao directoryDao = new DirectoryDaoImpl();
-        Optional<Directory> parent = directoryDao.find(parentId);
-        DocumentDao documentDao = new DocumentDaoImpl();
+        User user = userService.find(authorId);
+        Optional<Directory> parent = directoryService.find(parentId);
         Document document = new Document(null, parent, user,
                 name,
                 org.example.documentmanagermodel.StorableType.DOCUMENT,
@@ -45,7 +55,7 @@ public class CreateDocServlet extends HttpServlet {
                 priority,
                 new org.example.documentmanagermodel.DocType(1L, "Fax"),
                 null);
-        documentDao.create(document);
+        documentService.create(document);
         PrintWriter pw = resp.getWriter();
         pw.println("Document created");
     }

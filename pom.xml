@@ -9,7 +9,6 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>document-manager-rest</module>
         <module>document-manager-dto</module>
         <module>document-manager-dao</module>
         <module>document-manager-model</module>

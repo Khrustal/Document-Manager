@@ -6,6 +6,10 @@ import org.example.documentmanagerdao.UserDao;
 import org.example.documentmanagerdao.UserDaoImpl;
 import org.example.documentmanagermodel.Directory;
 import org.example.documentmanagermodel.User;
+import org.example.documentmanagerservices.DirectoryService;
+import org.example.documentmanagerservices.DirectoryServiceImpl;
+import org.example.documentmanagerservices.UserService;
+import org.example.documentmanagerservices.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +21,15 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 public class CreateDirServlet extends HttpServlet {
+
+    private UserService userService;
+    private DirectoryService directoryService;
+
+    @Override
+    public void init() throws ServletException {
+        userService = new UserServiceImpl();
+        directoryService = new DirectoryServiceImpl();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -30,17 +43,15 @@ public class CreateDirServlet extends HttpServlet {
         Long parentId = Long.parseLong(rq.getParameter("parent_id"));
         Long authorId = Long.parseLong(rq.getParameter("author_id"));
         String name = rq.getParameter("name");
-        System.out.println(rq.getParameter("free_access"));
         Boolean freeAccess = Boolean.parseBoolean(rq.getParameter("free_access"));
-        System.out.println(freeAccess);
-        UserDao userDao = new UserDaoImpl();
-        User user = userDao.find(authorId);
-        DirectoryDao directoryDao = new DirectoryDaoImpl();
-        Optional<Directory> parent = directoryDao.find(parentId);
+        User user = userService.find(authorId);
+        Optional<Directory> parent = directoryService.find(parentId);
+
         Directory directory = new Directory(null, parent, user, name, org.example.documentmanagermodel.StorableType.DIRECTORY,
                 org.example.documentmanagermodel.Statuses.CURRENT, new Timestamp(System.currentTimeMillis()), freeAccess);
 
-        directoryDao.create(directory);
+        directoryService.create(directory);
+
         PrintWriter pw = resp.getWriter();
         pw.println("Directory created");
     }

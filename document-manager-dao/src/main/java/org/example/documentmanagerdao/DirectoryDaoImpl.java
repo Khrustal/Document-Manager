@@ -146,7 +146,7 @@ public class DirectoryDaoImpl implements DirectoryDao{
         Optional<Directory> directory = directoryDao.find(id);
         Connection c = new DbConnector().connect();
         if(directory.isEmpty()) {
-            logger.info("org.example.documentmanagermodel.Directory not found");
+            logger.info("Directory not found");
         }
         else {
             try (PreparedStatement updateDirectory = c.prepareStatement(SQL_UPDATE_DIRECTORY)) {
@@ -164,7 +164,7 @@ public class DirectoryDaoImpl implements DirectoryDao{
         }
     }
 
-     //Return List of org.example.documentmanagermodel.Storable, but contents initialized as org.example.documentmanagermodel.Document or org.example.documentmanagermodel.Directory
+     //Return List ofStorable, but contents initialized as Document or Directory
     @Override
     public List<Storable> getContents(Long directoryId) {
         List<Storable> contents = new ArrayList<>();
@@ -188,6 +188,8 @@ public class DirectoryDaoImpl implements DirectoryDao{
                 Long userId = rs.getLong("author_id");
                 UserDao userDao = new UserDaoImpl();
                 User author = userDao.find(userId);
+                Long parentId = rs.getLong("parent_id");
+                parentDirectory = directoryDao.find(parentId);
                 String name = rs.getString("name");
                 Statuses status = Statuses.valueOf(rs.getString("status"));
                 Boolean freeAccess = rs.getBoolean("free_access");
@@ -197,7 +199,7 @@ public class DirectoryDaoImpl implements DirectoryDao{
                     String description = rs.getString("description");
                     Priorities priority = Priorities.valueOf(rs.getString("priority"));
 
-                    //Find org.example.documentmanagermodel.DocType
+                    //Find DocType
                     Long typeId = rs.getLong("document_type");
                     DocTypeDao docTypeDao = new DocTypeDaoImpl();
                     DocType docType = docTypeDao.find(typeId);
@@ -212,7 +214,7 @@ public class DirectoryDaoImpl implements DirectoryDao{
                     contents.add(document);
                 }
                 else {
-                    Directory directory = new Directory(directoryId, null, author, name, type, status,
+                    Directory directory = new Directory(directoryId, parentDirectory, author, name, type, status,
                             creation_DT, freeAccess);
                     contents.add(directory);
                 }

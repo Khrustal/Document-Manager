@@ -30,12 +30,6 @@ public class CreateDocServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        request.getRequestDispatcher("/create_doc.jsp").forward(request, response);
-    }
-
-    @Override
     protected void doPost(HttpServletRequest rq, HttpServletResponse resp)
             throws ServletException, IOException {
         Long parentId = Long.parseLong(rq.getParameter("parent_id"));

@@ -1,8 +1,13 @@
 package org.example.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.config.AppConfigSpring;
 import org.example.documentmanagermodel.DocType;
 import org.example.documentmanagerservices.DocTypeService;
 import org.example.documentmanagerservices.DocTypeServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,18 +23,24 @@ public class DocTypeServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        docTypeService = new DocTypeServiceImpl();
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfigSpring.class);
+        docTypeService = (DocTypeService) context.getBean("docTypeService");
+        //docTypeService = new DocTypeServiceImpl();
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse resp)
             throws IOException {
 
-        PrintWriter pw = response.getWriter();
-        pw.write("Document types\n");
+        PrintWriter pw = resp.getWriter();
         List<DocType> docTypes = docTypeService.findAll();
-        for(DocType docType : docTypes) {
-            pw.println(docType.getType());
-        }
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String result = mapper.writeValueAsString(docTypes);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        pw.print(result);
     }
 }
